@@ -1,6 +1,10 @@
-﻿declare module "dependency-injection" {
+﻿interface Creator<T> {
+    new (...args): T;
+}
+
+declare module "dependency-injection" {
     class Container {
-        get: <T>(arg: Creator<T>) => T;
+        get: <T>(arg: any) => T;
     }
 
     class Transient { }
@@ -27,9 +31,6 @@ declare module "aurelia-router" {
     }
 }
 
-interface Creator <T> {
-    new (...args): T;
-}
 
 interface IPromise<T> {
     then: (callback: (response: T) => void) => void;
