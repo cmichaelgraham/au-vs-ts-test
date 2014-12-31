@@ -3,9 +3,7 @@ au-vs-ts-test
 
 test environment for exercising the `Aurelia.d.ts` TypeScript definition file and related TypeScript tests
 
-# aurelia-skeleton-navigation
-
-This skeleton is part of the [Aurelia](http://www.aurelia.io/) platform. It sets up a standard navigation-style app using gulp to build your ES6 code with the 6to5 compiler. Karma/Jasmine testing is also configured.
+This TypeScript test project is part of the [Aurelia](http://www.aurelia.io/) platform. Karma/Jasmine testing is configured.
 
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to join us on [our Gitter Channel](https://gitter.im/Aurelia/Discuss).
 
