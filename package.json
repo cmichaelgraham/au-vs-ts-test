@@ -1,0 +1,8 @@
+{
+  "jspm": {
+    "name": "au-vs-ts-test",
+    "dependencies": {
+      "dependency-injection": "github:aurelia/dependency-injection@^0.1.1"
+    }
+  }
+}
