@@ -2,9 +2,14 @@
     new (...args): T;
 }
 
+interface ConstructorFunction<T> {
+    new (): T;
+}
+
 declare module "dependency-injection" {
     class Container {
-        get: <T>(arg: any) => T;
+        get: <T>(key: any) => T;
+        registerSingleton: <T>(key: any, fn: ConstructorFunction<T>) => void;
     }
 
     class Transient { }

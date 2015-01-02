@@ -13,160 +13,151 @@ class App02 {
 
 
 // 03 -----------------
+class Logger03 { }
+class App03 {
+    static inject = [];
+    constructor(public logger: Logger02) { }
+}
 
-describe('container', () => {
-    describe('injection', () => {
-        it('instantiates class without injected services', () => {
+
+// 04 -----------------
+class Logger04 { }
+
+class App04 {
+    static parameters = [[]];
+    constructor(public logger: Logger04) { }
+}
+
+
+// 05 -----------------
+class Logger05 { }
+
+class App05One {
+    static inject = [Logger05];
+    constructor(public logger: Logger05) { }
+}
+
+class App05Two {
+    static inject = [Logger05];
+    constructor(public logger: Logger05) { }
+}
+
+
+// 06 -----------------
+class Logger06 { }
+
+class App06One {
+    constructor(public logger: Logger06) { }
+}
+
+class App06Two {
+    constructor(public logger: Logger06) { }
+}
+
+
+// 07 -----------------
+class Logger07 {
+    static annotations() { return [new audi.Singleton()] }
+}
+
+class App07One {
+    static inject = [Logger07];
+    constructor(public logger: Logger07) { }
+}
+
+class App07Two {
+    static inject = [Logger07];
+    constructor(public logger: Logger07) { }
+}
+
+
+// 08 -----------------
+class Logger08 { static annotations = [] }
+Logger08.annotations = [new audi.Singleton()];
+
+class App08One {
+    static inject() { return [Logger08]; }
+    constructor(public logger: Logger08) { }
+}
+
+class App08Two {
+    static inject() { return [Logger08]; }
+    constructor(public logger: Logger08) { }
+}
+
+
+describe("container", () => {
+    describe("injection", () => {
+        it("instantiates class without injected services", () => {
             var container = new audi.Container();
-            var app = container.get(App01);
+            var app = container.get<App01>(App01);
             expect(app).toEqual(jasmine.any(App01));
         });
 
-        it('uses static inject method (ES6)', () => {
+        it("uses static inject method (ES6)", () => {
             var container = new audi.Container();
-            var app: App02 = container.get<App02>(App02);
-
+            var app = container.get<App02>(App02);
             expect(app.logger).toEqual(jasmine.any(Logger02));
         });
 
-        //it('uses static inject property (TypeScript,CoffeeScript,ES5)', function () {
-        //      class Logger { }
+        it("uses static inject property (TypeScript,CoffeeScript,ES5)", () => {
+            App03.inject = [Logger03];
 
-        //class App {
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            var container = new audi.Container();
+            var app = container.get<App03>(App03);
 
-        //App.inject = [Logger];
+            expect(app.logger).toEqual(jasmine.any(Logger03));
+        });
 
-        //var container = new Container();
-        //var app = container.get(App);
+        it("uses static parameters property (AtScript)", () => {
+            App04.parameters = [[Logger04]]; //Note: Normally provided by the AtScript compiler.
 
-        //expect(app.logger).toEqual(jasmine.any(Logger));
-        //    });
+            var container = new audi.Container();
+            var app = container.get<App04>(App04);
 
-        //it('uses static parameters property (AtScript)', function () {
-        //      class Logger { }
+            expect(app.logger).toEqual(jasmine.any(Logger04));
+        });
+    });
 
-        //class App {
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+    describe("registration", () => {
+        it("automatically configures as singleton", () => {
+            var container = new audi.Container();
 
-        //App.parameters = [[Logger]]; //Note: Normally provided by the AtScript compiler.
+            var app1 = container.get<App05One>(App05One);
+            var app2 = container.get<App05Two>(App05Two);
 
-        //var container = new Container();
-        //var app = container.get(App);
+            expect(app1.logger).toBe(app2.logger);
+        });
 
-        //expect(app.logger).toEqual(jasmine.any(Logger));
-        //    });
-        //  });
+        it("configures singleton via api", () => {
+            var container = new audi.Container();
+            container.registerSingleton(Logger06, Logger06);
 
-        //describe('registration', () => {
-        //    it('automatically configures as singleton', function () {
-        //      class Logger { }
+            var app1 = container.get<App06One>(App06One);
+            var app2 = container.get<App06Two>(App06Two);
 
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            expect(app1.logger).toBe(app2.logger);
+        });
 
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+        it("configures singleton via annotations method (ES6)", () => {
+            var container = new audi.Container();
 
-        //var container = new Container();
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
+            var app1 = container.get<App07One>(App07One);
+            var app2 = container.get<App07Two>(App07Two);
 
-        //expect(app1.logger).toBe(app2.logger);
-        //    });
+            expect(app1.logger).toBe(app2.logger);
+        });
 
-        //it('configures singleton via api', function () {
-        //      class Logger { }
+        it("configures singleton via annotations property (ES5, AtScript, TypeScript, CoffeeScript)", () => {
+            var container = new audi.Container();
 
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            var app1 = container.get<App08One>(App08One);
+            var app2 = container.get<App08Two>(App08Two);
 
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            expect(app1.logger).toBe(app2.logger);
+        });
 
-        //var container = new Container();
-        //container.registerSingleton(Logger, Logger);
-
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).toBe(app2.logger);
-        //    });
-
-        //it('configures singleton via annotations method (ES6)', function () {
-        //      class Logger {
-        //    static annotations() { return [new Singleton()] };
-        //}
-
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //var container = new Container();
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).toBe(app2.logger);
-        //    });
-
-        //it('configures singleton via annotations property (ES5, AtScript, TypeScript, CoffeeScript)', function () {
-        //      class Logger { }
-        //Logger.annotations = [new Singleton()];
-
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //var container = new Container();
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).toBe(app2.logger);
-        //    });
-
-        //it('configures transient (non singleton) via api', function () {
+        //it("configures transient (non singleton) via api", function () {
         //      class Logger { }
 
         //class App1 {
@@ -192,7 +183,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('configures transient (non singleton) via annotations method (ES6)', function () {
+        //it("configures transient (non singleton) via annotations method (ES6)", function () {
         //      class Logger {
         //    static annotations() { return [new Transient()] };
         //}
@@ -218,7 +209,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('configures transient (non singleton) via annotations property (ES5, AtScript, TypeScript, CoffeeScript)', function () {
+        //it("configures transient (non singleton) via annotations property (ES5, AtScript, TypeScript, CoffeeScript)", function () {
         //      class Logger { }
         //Logger.annotations = [new Transient()];
 
@@ -243,7 +234,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('configures instance via api', function () {
+        //it("configures instance via api", function () {
         //      class Logger { }
 
         //class App1 {
@@ -271,7 +262,7 @@ describe('container', () => {
         //expect(app2.logger).toBe(instance);
         //    });
 
-        //it('configures custom via api', function () {
+        //it("configures custom via api", function () {
         //      class Logger { }
 
         //class App1 {
@@ -298,7 +289,7 @@ describe('container', () => {
         //expect(app2.logger).toEqual("something strange");
         //    });
 
-        //it('uses base annotations method (ES6) when derived does not specify', function () {
+        //it("uses base annotations method (ES6) when derived does not specify", function () {
         //      class LoggerBase {
         //    static annotations() { return [new Transient()] };
         //}
@@ -328,7 +319,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify', function () {
+        //it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
         //      class LoggerBase { }
         //LoggerBase.annotations = [new Transient()];
 
@@ -357,7 +348,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('overrides base annotations method (ES6) with derived configuration', function () {
+        //it("overrides base annotations method (ES6) with derived configuration", function () {
         //      class LoggerBase {
         //    static annotations() { return [new Singleton()] };
         //}
@@ -387,7 +378,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('overrides base annotations property (ES5, AtScript, TypeScript, CoffeeScript) with derived configuration', function () {
+        //it("overrides base annotations property (ES5, AtScript, TypeScript, CoffeeScript) with derived configuration", function () {
         //      class LoggerBase {
         //    static annotations() { return [new Singleton()] };
         //}
@@ -416,7 +407,7 @@ describe('container', () => {
         //expect(app1.logger).not.toBe(app2.logger);
         //    });
 
-        //it('configures key as service when transient api only provided with key', function () {
+        //it("configures key as service when transient api only provided with key", function () {
         //      class Logger { }
 
         //var container = new Container();
@@ -430,7 +421,7 @@ describe('container', () => {
         //expect(logger2).not.toBe(logger1);
         //    });
 
-        //it('configures key as service when singleton api only provided with key', function () {
+        //it("configures key as service when singleton api only provided with key", function () {
         //      class Logger { }
 
         //var container = new Container();
@@ -444,7 +435,7 @@ describe('container', () => {
         //expect(logger2).toBe(logger1);
         //    });
 
-        //it('configures concrete singelton via api for abstract dependency', function () {
+        //it("configures concrete singelton via api for abstract dependency", function () {
         //      class LoggerBase { }
         //class Logger extends LoggerBase { }
 
@@ -463,7 +454,7 @@ describe('container', () => {
         //expect(app.logger).toEqual(jasmine.any(Logger));
         //    });
 
-        //it('configures concrete transient via api for abstract dependency', function () {
+        //it("configures concrete transient via api for abstract dependency", function () {
         //      class LoggerBase { }
         //class Logger extends LoggerBase { }
 
