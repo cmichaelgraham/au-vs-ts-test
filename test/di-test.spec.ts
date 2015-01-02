@@ -131,6 +131,69 @@ class App11Two {
 }
 
 
+// 12 -----------------
+class Logger12 { }
+
+class App12One {
+    static inject() { return [Logger12]; }
+    constructor(public logger: Logger12) { }
+}
+
+class App12Two {
+    static inject() { return [Logger12]; }
+    constructor(public logger: Logger12) { }
+}
+
+
+// 13 -----------------
+class Logger13 { }
+
+class App13One {
+    static inject() { return [Logger13]; }
+    constructor(public logger: Logger13) { }
+}
+
+class App13Two {
+    static inject() { return [Logger13]; }
+    constructor(public logger: Logger13) { }
+}
+
+
+// 14 -----------------
+class LoggerBase14 {
+    static annotations() { return [new audi.Transient()] }
+}
+
+class Logger14 extends LoggerBase14 { }
+
+class App14One {
+    static inject() { return [Logger14]; }
+    constructor(public logger: Logger14) { }
+}
+
+class App14Two {
+    static inject() { return [Logger14]; }
+    constructor(public logger: Logger14) { }
+}
+
+
+// 15 -----------------
+class LoggerBase15 { static annotations = [] }
+LoggerBase15.annotations = [new audi.Transient()];
+
+class Logger15 extends LoggerBase15 { }
+
+class App15One {
+    static inject() { return [Logger15]; }
+    constructor(public logger: Logger15) { }
+}
+
+class App15Two {
+    static inject() { return [Logger15]; }
+    constructor(public logger: Logger15) { }
+}
+
+
 describe("container", () => {
     describe("injection", () => {
         it("instantiates class without injected services", () => {
@@ -232,119 +295,46 @@ describe("container", () => {
             expect(app1.logger).not.toBe(app2.logger);
         });
 
-        //it("configures instance via api", function () {
-        //      class Logger { }
+        it("configures instance via api", () => {
+            var container = new audi.Container();
+            var instance = new Logger12();
+            container.registerInstance(Logger12, instance);
 
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            var app1 = container.get<App12One>(App12One);
+            var app2 = container.get<App12Two>(App12Two);
 
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            expect(app1.logger).toBe(instance);
+            expect(app2.logger).toBe(instance);
+        });
 
-        //var container = new Container();
-        //var instance = new Logger();
-        //container.registerInstance(Logger, instance);
+        it("configures custom via api", () => {
+            var container = new audi.Container();
+            container.registerHandler(Logger13, c => "something strange");
 
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
+            var app1 = container.get<App13One>(App13One);
+            var app2 = container.get<App13Two>(App13Two);
 
-        //expect(app1.logger).toBe(instance);
-        //expect(app2.logger).toBe(instance);
-        //    });
+            expect(app1.logger).toEqual("something strange");
+            expect(app2.logger).toEqual("something strange");
+        });
 
-        //it("configures custom via api", function () {
-        //      class Logger { }
+        it("uses base annotations method (ES6) when derived does not specify", () => {
+            var container = new audi.Container();
 
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            var app1 = container.get<App14One>(App14One);
+            var app2 = container.get<App14Two>(App14Two);
 
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            expect(app1.logger).not.toBe(app2.logger);
+        });
 
-        //var container = new Container();
-        //container.registerHandler(Logger, c => "something strange");
+        it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
+            var container = new audi.Container();
 
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
+            var app1 = container.get<App15One>(App15One);
+            var app2 = container.get<App15Two>(App15Two);
 
-        //expect(app1.logger).toEqual("something strange");
-        //expect(app2.logger).toEqual("something strange");
-        //    });
-
-        //it("uses base annotations method (ES6) when derived does not specify", function () {
-        //      class LoggerBase {
-        //    static annotations() { return [new Transient()] };
-        //}
-
-        //class Logger extends LoggerBase {
-
-        //}
-
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //var container = new Container();
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).not.toBe(app2.logger);
-        //    });
-
-        //it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
-        //      class LoggerBase { }
-        //LoggerBase.annotations = [new Transient()];
-
-        //class Logger extends LoggerBase {
-
-        //}
-
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //var container = new Container();
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).not.toBe(app2.logger);
-        //    });
+            expect(app1.logger).not.toBe(app2.logger);
+        });
 
         //it("overrides base annotations method (ES6) with derived configuration", function () {
         //      class LoggerBase {
