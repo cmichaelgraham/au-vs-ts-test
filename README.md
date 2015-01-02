@@ -59,7 +59,7 @@ When setting a DI attribute of a base class in TypeScript code, the derived clas
 The test around 15 and 15A in the repo both pass.
 
 ## Classes
-```
+```javascript
 // 15 -----------------
 class LoggerBase15 { static annotations = [] }
 LoggerBase15.annotations = [new audi.Transient()];
@@ -95,7 +95,7 @@ class App15ATwo {
 ```
 
 ## And Corresponding Tests
-```
+```javascript
         it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
             var container = new audi.Container();
 
