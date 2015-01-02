@@ -156,6 +156,58 @@ define(["require", "exports", "dependency-injection"], function (require, export
         };
         return App09Two;
     })();
+    // 10 -----------------
+    var Logger10 = (function () {
+        function Logger10() {
+        }
+        Logger10.annotations = function () {
+            return [new audi.Transient()];
+        };
+        return Logger10;
+    })();
+    var App10One = (function () {
+        function App10One(logger) {
+            this.logger = logger;
+        }
+        App10One.inject = function () {
+            return [Logger10];
+        };
+        return App10One;
+    })();
+    var App10Two = (function () {
+        function App10Two(logger) {
+            this.logger = logger;
+        }
+        App10Two.inject = function () {
+            return [Logger10];
+        };
+        return App10Two;
+    })();
+    // 11 -----------------
+    var Logger11 = (function () {
+        function Logger11() {
+        }
+        Logger11.annotations = [];
+        return Logger11;
+    })();
+    var App11One = (function () {
+        function App11One(logger) {
+            this.logger = logger;
+        }
+        App11One.inject = function () {
+            return [Logger11];
+        };
+        return App11One;
+    })();
+    var App11Two = (function () {
+        function App11Two(logger) {
+            this.logger = logger;
+        }
+        App11Two.inject = function () {
+            return [Logger11];
+        };
+        return App11Two;
+    })();
     describe("container", function () {
         describe("injection", function () {
             it("instantiates class without injected services", function () {
@@ -215,47 +267,19 @@ define(["require", "exports", "dependency-injection"], function (require, export
                 var app2 = container.get(App09Two);
                 expect(app1.logger).not.toBe(app2.logger);
             });
-            //it("configures transient (non singleton) via annotations method (ES6)", function () {
-            //      class Logger {
-            //    static annotations() { return [new Transient()] };
-            //}
-            //class App1 {
-            //    static inject() { return [Logger]; };
-            //    constructor(logger) {
-            //        this.logger = logger;
-            //    }
-            //}
-            //class App2 {
-            //    static inject() { return [Logger]; };
-            //    constructor(logger) {
-            //        this.logger = logger;
-            //    }
-            //}
-            //var container = new Container();
-            //var app1 = container.get(App1);
-            //var app2 = container.get(App2);
-            //expect(app1.logger).not.toBe(app2.logger);
-            //    });
-            //it("configures transient (non singleton) via annotations property (ES5, AtScript, TypeScript, CoffeeScript)", function () {
-            //      class Logger { }
-            //Logger.annotations = [new Transient()];
-            //class App1 {
-            //    static inject() { return [Logger]; };
-            //    constructor(logger) {
-            //        this.logger = logger;
-            //    }
-            //}
-            //class App2 {
-            //    static inject() { return [Logger]; };
-            //    constructor(logger) {
-            //        this.logger = logger;
-            //    }
-            //}
-            //var container = new Container();
-            //var app1 = container.get(App1);
-            //var app2 = container.get(App2);
-            //expect(app1.logger).not.toBe(app2.logger);
-            //    });
+            it("configures transient (non singleton) via annotations method (ES6)", function () {
+                var container = new audi.Container();
+                var app1 = container.get(App10One);
+                var app2 = container.get(App10Two);
+                expect(app1.logger).not.toBe(app2.logger);
+            });
+            it("configures transient (non singleton) via annotations property (ES5, AtScript, TypeScript, CoffeeScript)", function () {
+                var container = new audi.Container();
+                Logger11.annotations = [new audi.Transient()];
+                var app1 = container.get(App11One);
+                var app2 = container.get(App11Two);
+                expect(app1.logger).not.toBe(app2.logger);
+            });
             //it("configures instance via api", function () {
             //      class Logger { }
             //class App1 {
