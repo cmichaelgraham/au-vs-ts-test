@@ -329,6 +329,39 @@ define(["require", "exports", "dependency-injection"], function (require, export
         };
         return App15Two;
     })();
+    // 15A -----------------
+    var LoggerBase15A = (function () {
+        function LoggerBase15A() {
+        }
+        LoggerBase15A.annotations = [];
+        return LoggerBase15A;
+    })();
+    var Logger15A = (function (_super) {
+        __extends(Logger15A, _super);
+        function Logger15A() {
+            _super.apply(this, arguments);
+        }
+        return Logger15A;
+    })(LoggerBase15A);
+    LoggerBase15A.annotations = [new audi.Transient()];
+    var App15AOne = (function () {
+        function App15AOne(logger) {
+            this.logger = logger;
+        }
+        App15AOne.inject = function () {
+            return [Logger15A];
+        };
+        return App15AOne;
+    })();
+    var App15ATwo = (function () {
+        function App15ATwo(logger) {
+            this.logger = logger;
+        }
+        App15ATwo.inject = function () {
+            return [Logger15A];
+        };
+        return App15ATwo;
+    })();
     describe("container", function () {
         describe("injection", function () {
             it("instantiates class without injected services", function () {
@@ -429,6 +462,12 @@ define(["require", "exports", "dependency-injection"], function (require, export
                 var app1 = container.get(App15One);
                 var app2 = container.get(App15Two);
                 expect(app1.logger).not.toBe(app2.logger);
+            });
+            it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
+                var container = new audi.Container();
+                var app1 = container.get(App15AOne);
+                var app2 = container.get(App15ATwo);
+                expect(app1.logger).toBe(app2.logger);
             });
             //it("overrides base annotations method (ES6) with derived configuration", function () {
             //      class LoggerBase {

@@ -194,6 +194,23 @@ class App15Two {
 }
 
 
+// 15A -----------------
+class LoggerBase15A { static annotations = [] }
+class Logger15A extends LoggerBase15A { }
+
+LoggerBase15A.annotations = [new audi.Transient()];
+
+class App15AOne {
+    static inject() { return [Logger15A]; }
+    constructor(public logger: Logger15A) { }
+}
+
+class App15ATwo {
+    static inject() { return [Logger15A]; }
+    constructor(public logger: Logger15A) { }
+}
+
+
 describe("container", () => {
     describe("injection", () => {
         it("instantiates class without injected services", () => {
@@ -334,6 +351,15 @@ describe("container", () => {
             var app2 = container.get<App15Two>(App15Two);
 
             expect(app1.logger).not.toBe(app2.logger);
+        });
+
+        it("uses base annotations property (ES5, AtScript, TypeScript, CoffeeScript) when derived does not specify", function () {
+            var container = new audi.Container();
+
+            var app1 = container.get<App15AOne>(App15AOne);
+            var app2 = container.get<App15ATwo>(App15ATwo);
+
+            expect(app1.logger).toBe(app2.logger);
         });
 
         //it("overrides base annotations method (ES6) with derived configuration", function () {
