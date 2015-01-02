@@ -10,8 +10,8 @@ declare module "dependency-injection" {
 
     class Container {
         get: <T>(key: any) => T;
-        registerSingleton: <T>(key: any, fn: Creator<T>) => void;
-        registerTransient: <T>(key: any, fn: Creator<T>) => void;
+        registerSingleton: <T>(key: any, fn?: Creator<T>) => void;
+        registerTransient: <T>(key: any, fn?: Creator<T>) => void;
         registerInstance: (key: any, instance: any) => void;
         registerHandler: (key: any, callback: HandlerCallback) => void;
     }

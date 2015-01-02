@@ -56,7 +56,7 @@ There appears to be some interesting behavior with derived classes.
 
 When setting a DI attribute of a base class in TypeScript code, the derived class will not get the attribute (and therefore DI derived class behavior will not be as expected when the attribute controls desired DI behavior) if the attribute is set AFTER the derived class is defined. 
 
-The test around 15 and 15A in the repo both pass.
+The tests around 15 and 15A in the repo both pass.
 
 ## Classes
 ```javascript
