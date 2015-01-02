@@ -9,7 +9,8 @@ interface ConstructorFunction<T> {
 declare module "dependency-injection" {
     class Container {
         get: <T>(key: any) => T;
-        registerSingleton: <T>(key: any, fn: ConstructorFunction<T>) => void;
+        registerSingleton: <T>(key: any, fn: Creator<T>) => void;
+        registerTransient: <T>(key: any, fn: Creator<T>) => void;
     }
 
     class Transient { }

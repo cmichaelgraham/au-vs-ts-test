@@ -43,6 +43,8 @@ To run the unit tests, first ensure that you have followed the steps above in or
   ```shell
   karma start
   ```
+
+  You can edit the tests in Visual Studio.  When you save, karma is watching the test files to detect changes and will re-run the tests.  You will see test results (successes & failures) in the shell.
   
 ## Contributing
 

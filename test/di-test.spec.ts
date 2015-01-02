@@ -73,7 +73,6 @@ class App07Two {
 
 // 08 -----------------
 class Logger08 { static annotations = [] }
-Logger08.annotations = [new audi.Singleton()];
 
 class App08One {
     static inject() { return [Logger08]; }
@@ -84,6 +83,21 @@ class App08Two {
     static inject() { return [Logger08]; }
     constructor(public logger: Logger08) { }
 }
+
+
+// 09 -----------------
+class Logger09 { }
+
+class App09One {
+    static inject() { return [Logger09]; }
+    constructor(public logger: Logger09) {}
+}
+
+class App09Two {
+    static inject() { return [Logger09]; }
+    constructor(public logger: Logger09) {}
+}
+
 
 
 describe("container", () => {
@@ -150,6 +164,7 @@ describe("container", () => {
 
         it("configures singleton via annotations property (ES5, AtScript, TypeScript, CoffeeScript)", () => {
             var container = new audi.Container();
+            Logger08.annotations = [new audi.Singleton()];
 
             var app1 = container.get<App08One>(App08One);
             var app2 = container.get<App08Two>(App08Two);
@@ -157,31 +172,15 @@ describe("container", () => {
             expect(app1.logger).toBe(app2.logger);
         });
 
-        //it("configures transient (non singleton) via api", function () {
-        //      class Logger { }
+        it("configures transient (non singleton) via api", () => {
+            var container = new audi.Container();
+            container.registerTransient(Logger09, Logger09);
 
-        //class App1 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
+            var app1 = container.get<App09One>(App09One);
+            var app2 = container.get<App09Two>(App09Two);
 
-        //class App2 {
-        //    static inject() { return [Logger]; };
-        //    constructor(logger) {
-        //        this.logger = logger;
-        //    }
-        //}
-
-        //var container = new Container();
-        //container.registerTransient(Logger, Logger);
-
-        //var app1 = container.get(App1);
-        //var app2 = container.get(App2);
-
-        //expect(app1.logger).not.toBe(app2.logger);
-        //    });
+            expect(app1.logger).not.toBe(app2.logger);
+        });
 
         //it("configures transient (non singleton) via annotations method (ES6)", function () {
         //      class Logger {
