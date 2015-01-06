@@ -50,18 +50,28 @@ To run the unit tests, first ensure that you have followed the steps above in or
 
 By default, the latest release of the dependency repos (github:aurelia/dependency-injection and github:aurelia/metadata) are used.  Follow these steps to run this project against the latest on master.
 
-1. download to a folder named `aurelia` and build the repos (follow the repo instructions)
+1. Download to a folder named `aurelia` and build the repos (follow the repo instructions)
 
   1. http://github.com/aurelia/metadata
   2. http://github.com/aurelia/dependency-injection
-  
-2. update the dependencies from the local projects
+ 
+2. Update the dependencies in the `dependency-injection`
+
+  This points the `dependency-injection` at the local `metadata` instead of the released version.
 
   ```shell
   gulp update-own-deps
   ```
 
-3. You can now run the tests with this command:
+3. Update the dependencies in `au-vs-ts-test`
+
+  This points the `au-vs-ts-test` at the local `dependency-injection` and `metadata` instead of the released versions.
+
+  ```shell
+  gulp update-own-deps
+  ```
+
+4. You can now run the tests with this command:
 
   ```shell
   karma start
