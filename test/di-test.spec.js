@@ -487,6 +487,39 @@ define(["require", "exports", "dependency-injection"], function (require, export
         };
         return App21;
     })();
+    // 22 -----------------
+    var LoggerBase22 = (function () {
+        function LoggerBase22() {
+        }
+        LoggerBase22.annotations = [new audi.Transient()];
+        return LoggerBase22;
+    })();
+    var Logger22 = (function (_super) {
+        __extends(Logger22, _super);
+        function Logger22() {
+            _super.apply(this, arguments);
+        }
+        Logger22.annotations = ["goofy", "mickey"];
+        return Logger22;
+    })(LoggerBase22);
+    var App22One = (function () {
+        function App22One(logger) {
+            this.logger = logger;
+        }
+        App22One.inject = function () {
+            return [Logger22];
+        };
+        return App22One;
+    })();
+    var App22Two = (function () {
+        function App22Two(logger) {
+            this.logger = logger;
+        }
+        App22Two.inject = function () {
+            return [Logger22];
+        };
+        return App22Two;
+    })();
     describe("container", function () {
         describe("injection", function () {
             it("instantiates class without injected services", function () {
@@ -635,6 +668,12 @@ define(["require", "exports", "dependency-injection"], function (require, export
                 container.registerTransient(LoggerBase21, Logger21);
                 var app = container.get(App21);
                 expect(app.logger).toEqual(jasmine.any(Logger21));
+            });
+            it("does hide the base class attributes due to typescript bug", function () {
+                var container = new audi.Container();
+                var app1 = container.get(App22One);
+                var app2 = container.get(App22Two);
+                expect(app1.logger).toBe(app2.logger);
             });
         });
     });

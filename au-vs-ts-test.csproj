@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="config.js" />
+    <Content Include="gulpfile.js" />
     <Content Include="index.html" />
     <Content Include="karma.conf.js" />
     <Content Include="web.config" />

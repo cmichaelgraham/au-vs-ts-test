@@ -45,6 +45,21 @@ To run the unit tests, first ensure that you have followed the steps above in or
   ```
 
   You can edit the tests in Visual Studio.  When you save, karma is watching the test files to detect changes and will re-run the tests.  You will see test results (successes & failures) in the shell.
+
+  ## Running against the latest on master
+
+  By default, the latest release of the dependency repos (github:aurelia/dependency-injection and github:aurelia/metadata) are used.  Follow these steps to run this project against the latest on master.
+
+  1. download to a folder named `aurelia` and build the repos (follow the repo instructions)
+
+  http://github.com/aurelia/metadata
+  http://github.com/aurelia/dependency-injection
+  
+  2. update the dependencies from the local projects
+
+  ```shell
+gulp update-own-deps
+```
   
 ## Contributing
 

@@ -277,6 +277,21 @@ class App21 {
 }
 
 
+// 22 -----------------
+class LoggerBase22 { static annotations = [new audi.Transient()] }
+class Logger22 extends LoggerBase22 { static annotations = ["goofy", "mickey"] }
+
+class App22One {
+    static inject() { return [Logger22]; }
+    constructor(public logger: Logger22) { }
+}
+
+class App22Two {
+    static inject() { return [Logger22]; }
+    constructor(public logger: Logger22) { }
+}
+
+
 describe("container", () => {
     describe("injection", () => {
         it("instantiates class without injected services", () => {
@@ -488,6 +503,15 @@ describe("container", () => {
             var app = container.get<App21>(App21);
 
             expect(app.logger).toEqual(jasmine.any(Logger21));
+        });
+
+        it("does hide the base class attributes due to typescript bug", () => {
+            var container = new audi.Container();
+
+            var app1 = container.get<App22One>(App22One);
+            var app2 = container.get<App22Two>(App22Two);
+
+            expect(app1.logger).toBe(app2.logger);
         });
     });
 });
